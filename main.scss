@@ -1,0 +1,39 @@
+@mixin google-font($font) {
+  $font: unquote($font);
+  @import url(https://fonts.googleapis.com/css?family=#{$font});
+}
+@import "./variables";
+
+@mixin warning {
+  background-color: orange;
+  color: white;
+}
+
+@include google-font("Alegreya+Sans");
+@include google-font(("Titilium+Web"));
+
+body {
+  .header {
+    height: $header-height;
+    background-color: $text-color;
+  }
+
+  .heading {
+    font-family: $heading-font;
+  }
+}
+
+.warning-button {
+  @include warning;
+  padding: 8px 12px;
+}
+
+@mixin fancyButton($radius, $color, $textColor) {
+  background-color: $color;
+  border-radius: $radius;
+  color: $textColor;
+}
+
+button {
+  @include fancyButton(10px, red, white);
+}
