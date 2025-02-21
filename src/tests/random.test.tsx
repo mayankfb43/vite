@@ -1,32 +1,19 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { Random } from "../Random";
-import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/node";
 import { renderWithProviders } from "../../testUtils";
-
-export const handlers = [
-  http.get("https://jsonplaceholder.typicode.com/users", () => {
-    return HttpResponse.json([
-      { id: 1, name: "john" },
-      { id: 2, name: "cindy" },
-    ]);
-  }),
-];
-
-const server = setupServer(...handlers);
-
-beforeAll(() => {
-  server.listen();
-});
-afterEach(() => {
-  server.resetHandlers();
-});
-afterAll(() => {
-  server.close();
-});
+import { createServer } from "../../createServer";
 
 describe("Random Component", () => {
+  createServer({
+    path: "https://jsonplaceholder.typicode.com/users",
+    data: [
+      { id: 1, name: "john" },
+      { id: 2, name: "cindy" },
+    ],
+    method: "get",
+  });
+
   it("renders correctly", async () => {
     renderWithProviders(<Random />);
 
@@ -34,14 +21,24 @@ describe("Random Component", () => {
     expect(listItems).toHaveLength(2);
     screen.debug(listItems);
   });
+});
+
+describe("Random Component", () => {
+  try {
+    createServer({
+      path: "https://jsonplaceholder.typicode.com/users",
+      data: [
+        { id: 1, name: "john" },
+        { id: 2, name: "cindy" },
+      ],
+      method: "get",
+      throw404: true,
+    });
+  } catch (e: any) {
+    screen.debug(e);
+  }
 
   it("error", async () => {
-    server.use(
-      http.get("https://jsonplaceholder.typicode.com/users", async () => {
-        return new HttpResponse(null, { status: 500 });
-      })
-    );
-
     renderWithProviders(<Random />);
     const errorMessage = await screen.findByText(/error/i); // Adjust this text based on your actual UI
     expect(errorMessage).toBeInTheDocument();
