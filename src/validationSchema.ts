@@ -27,6 +27,16 @@ export const getValidationSchema = (watch: any) => {
 
             return nameArr[index] > 18;
           }),
+        height: yup
+          .number()
+          .required("This field is required")
+          .test("min-age", "Age must be greater than 18", function () {
+            const index = this.path.match(/\d+/)[0];
+            const names = watch("name")["students"] || [];
+            let nameArr = names.map((n: any) => n.height);
+
+            return nameArr[index] > 18;
+          }),
       })
     ),
   });

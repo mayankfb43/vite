@@ -2,9 +2,15 @@
 import { Field } from "@m/alchemy-ui/Field";
 import { Input } from "@m/alchemy-ui/Input";
 import { Button } from "@m/alchemy-ui/Button";
-import React from "react";
+import React, { useState } from "react";
+import { RangeInput } from "@m/alchemy-ui/RangeInput";
 
-import { useForm, useFieldArray, FormProvider } from "react-hook-form";
+import {
+  useForm,
+  useFieldArray,
+  FormProvider,
+  Controller,
+} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getValidationSchema } from "./validationSchema"; // Import the Yup schema
 import { v4 as uuidv4 } from "uuid"; // Import UUID generator
@@ -16,6 +22,7 @@ export function DynamicForm() {
     },
     resolver: yupResolver(getValidationSchema(() => methods.watch())),
   });
+  const [value, setValue] = useState(50);
 
   const {
     register,
@@ -69,6 +76,32 @@ export function DynamicForm() {
                     : undefined
                 }
               />
+              <Controller
+                name={`students.${index}.height`}
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    label="Range"
+                    description="Select a range"
+                    status={
+                      fieldState.error?.message
+                        ? {
+                            level: "error",
+                            message: fieldState.error.message,
+                          }
+                        : null
+                    }
+                    input={
+                      <RangeInput
+                        ref={field.ref}
+                        min={0}
+                        max={100}
+                        {...field}
+                      />
+                    }
+                  />
+                )}
+              />
               <Button
                 type="button"
                 disabled={fields.length === 1}
@@ -84,7 +117,9 @@ export function DynamicForm() {
           </Button>
           <Button
             type="button"
-            onClick={() => append({ id: uuidv4(), name: "", age: "" })}
+            onClick={() =>
+              append({ id: uuidv4(), name: "", age: "", height: 0 })
+            }
             size="small"
           >
             Add Student
