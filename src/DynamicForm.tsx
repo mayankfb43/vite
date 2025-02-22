@@ -25,7 +25,7 @@ export function DynamicForm() {
     formState: { errors },
   } = methods;
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "students",
   });
@@ -69,6 +69,13 @@ export function DynamicForm() {
                     : undefined
                 }
               />
+              <Button
+                type="button"
+                disabled={fields.length === 1}
+                onClick={() => remove(index)}
+              >
+                remove
+              </Button>
             </React.Fragment>
           ))}
 
