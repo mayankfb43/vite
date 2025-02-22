@@ -12,11 +12,17 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@hookform/resolvers": "^4.1.1",
+    "@m/alchemy-ui": "^40.12.6",
     "@reduxjs/toolkit": "^2.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
     "react-redux": "^9.2.0",
-    "sass": "^1.85.0"
+    "sass": "^1.85.0",
+    "styled-components": "^5.3.11",
+    "uuid": "^11.1.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

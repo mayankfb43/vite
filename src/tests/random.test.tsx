@@ -312,7 +312,7 @@ describe("Random Component", () => {
 describe("Random Component", () => {
   try {
     createServer({
-      path: "https://jsonplaceholder.typicode.com/users/0",
+      path: "https://jsonplaceholder.typicode.com/users/1",
       data: [],
       method: "get",
       throw404: true,

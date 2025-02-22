@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1740145454083" clover="3.2.0">
-  <project timestamp="1740145454083" name="All files">
+<coverage generated="1740145656418" clover="3.2.0">
+  <project timestamp="1740145656418" name="All files">
     <metrics statements="150" coveredstatements="134" conditionals="27" coveredconditionals="26" methods="11" coveredmethods="11" elements="188" coveredelements="171" complexity="0" loc="150" ncloc="150" packages="5" files="8" classes="8"/>
     <package name="vite-project">
       <metrics statements="43" coveredstatements="38" conditionals="8" coveredconditionals="7" methods="3" coveredmethods="3"/>

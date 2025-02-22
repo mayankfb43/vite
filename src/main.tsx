@@ -1,13 +1,13 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import { App } from "./App.tsx";
+import { DynamicForm } from "./DynamicForm";
 import { setupStore } from "./app/store";
 import { Provider } from "react-redux";
-import "../main.scss";
+import { AlchemyProvider } from "@m/alchemy-ui/AlchemyProvider";
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={setupStore()}>
-    <App />
+    <AlchemyProvider>
+      <DynamicForm />
+    </AlchemyProvider>
   </Provider>
 );
