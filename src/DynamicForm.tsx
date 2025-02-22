@@ -4,6 +4,7 @@ import { Input } from "@m/alchemy-ui/Input";
 import { Button } from "@m/alchemy-ui/Button";
 import React, { useState } from "react";
 import { RangeInput } from "@m/alchemy-ui/RangeInput";
+import { MultiSelect } from "@m/alchemy-ui/MultiSelect";
 
 import {
   useForm,
@@ -102,6 +103,42 @@ export function DynamicForm() {
                   />
                 )}
               />
+              <Controller
+                name={`students.${index}.skills`}
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    label="Skills"
+                    description="Select skills"
+                    status={
+                      fieldState.error?.message
+                        ? {
+                            level: "error",
+                            message: fieldState.error.message,
+                          }
+                        : null
+                    }
+                    input={
+                      <MultiSelect
+                        ref={field.ref}
+                        options={[
+                          { label: "React", value: "first_value" },
+                          { label: "Javascript", value: "second_value" },
+                          { label: "CSS 3", value: "third_value" },
+                          {
+                            label: "Disabled option",
+                            value: "disabled_value",
+                            disabled: true,
+                          },
+                        ]}
+                        onChange={(selected) =>
+                          field.onChange(selected.map((item) => item.value))
+                        }
+                      />
+                    }
+                  />
+                )}
+              />
               <Button
                 type="button"
                 disabled={fields.length === 1}
@@ -118,7 +155,7 @@ export function DynamicForm() {
           <Button
             type="button"
             onClick={() =>
-              append({ id: uuidv4(), name: "", age: "", height: 0 })
+              append({ id: uuidv4(), name: "", age: "", height: 0, skills: [] })
             }
             size="small"
           >

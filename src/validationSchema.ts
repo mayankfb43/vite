@@ -37,6 +37,15 @@ export const getValidationSchema = (watch: any) => {
 
             return nameArr[index] > 18;
           }),
+        skills: yup
+          .array()
+          .required("This field is required")
+          .test("skills", "At least 2 skills required", function () {
+            const index = this.path.match(/\d+/)[0];
+            const skills = watch() || [];
+            console.log(skills);
+            return true;
+          }),
       })
     ),
   });
