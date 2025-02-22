@@ -30,7 +30,7 @@ export const getValidationSchema = (watch: any) => {
         height: yup
           .number()
           .required("This field is required")
-          .test("min-age", "Age must be greater than 18", function () {
+          .test("min-age", "height must be greater than 18", function () {
             const index = this.path.match(/\d+/)[0];
             const names = watch("name")["students"] || [];
             let nameArr = names.map((n: any) => n.height);
@@ -42,10 +42,14 @@ export const getValidationSchema = (watch: any) => {
           .required("This field is required")
           .test("skills", "At least 2 skills required", function () {
             const index = this.path.match(/\d+/)[0];
-            const skills = watch() || [];
-            console.log(skills);
-            return true;
+            const students = watch() || [];
+
+            return students["students"][index].skills.length > 2 ? true : false;
           }),
+        gender: yup
+          .string()
+          .oneOf(["Male", "Female"], "Gender is required")
+          .required("Gender is required"), // ✅ Add required validation
       })
     ),
   });

@@ -5,6 +5,8 @@ import { Button } from "@m/alchemy-ui/Button";
 import React, { useState } from "react";
 import { RangeInput } from "@m/alchemy-ui/RangeInput";
 import { MultiSelect } from "@m/alchemy-ui/MultiSelect";
+import { Radio } from "@m/alchemy-ui/Radio";
+import { RadioGroup } from "@m/alchemy-ui/RadioGroup";
 
 import {
   useForm,
@@ -15,6 +17,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getValidationSchema } from "./validationSchema"; // Import the Yup schema
 import { v4 as uuidv4 } from "uuid"; // Import UUID generator
+import { Fieldset } from "@m/alchemy-ui/Fieldset";
 
 export function DynamicForm() {
   const methods = useForm({
@@ -24,6 +27,7 @@ export function DynamicForm() {
     resolver: yupResolver(getValidationSchema(() => methods.watch())),
   });
   const [value, setValue] = useState(50);
+  const items = ["Male", "Female"];
 
   const {
     register,
@@ -52,7 +56,6 @@ export function DynamicForm() {
           {fields.map((field, index) => (
             <React.Fragment key={field.id}>
               <Field
-                required
                 label="Name"
                 input={<Input {...register(`students.${index}.name`)} />}
                 status={
@@ -65,7 +68,6 @@ export function DynamicForm() {
                 }
               />
               <Field
-                required
                 label="Age"
                 input={<Input {...register(`students.${index}.age`)} />}
                 status={
@@ -139,6 +141,42 @@ export function DynamicForm() {
                   />
                 )}
               />
+              <Controller
+                name={`students.${index}.gender`}
+                control={control}
+                render={({ field, fieldState }) => {
+                  return (
+                    <Fieldset
+                      label="Gender"
+                      description="Select gender"
+                      status={
+                        fieldState.error?.message // ✅ Ensure error message is displayed
+                          ? {
+                              level: "error",
+                              message: fieldState.error.message,
+                            }
+                          : null
+                      }
+                      input={
+                        <RadioGroup layout="row" selection={field.value}>
+                          {({ isSelected, handleChange }) =>
+                            items.map((item) => (
+                              <Radio
+                                key={item}
+                                label={item}
+                                name={`students.${index}.gender`} // ✅ Ensure name is dynamic
+                                checked={isSelected(item)}
+                                onChange={() => field.onChange(item)}
+                              />
+                            ))
+                          }
+                        </RadioGroup>
+                      }
+                    />
+                  );
+                }}
+              />
+
               <Button
                 type="button"
                 disabled={fields.length === 1}
@@ -155,7 +193,14 @@ export function DynamicForm() {
           <Button
             type="button"
             onClick={() =>
-              append({ id: uuidv4(), name: "", age: "", height: 0, skills: [] })
+              append({
+                id: uuidv4(),
+                name: "",
+                age: "",
+                height: 0,
+                skills: [],
+                gender: "",
+              })
             }
             size="small"
           >
