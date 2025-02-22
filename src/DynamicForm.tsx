@@ -14,7 +14,7 @@ export function DynamicForm() {
     defaultValues: {
       students: [],
     },
-    resolver: yupResolver(getValidationSchema(() => methods.watch())), // Correct usage
+    resolver: yupResolver(getValidationSchema(() => methods.watch())),
   });
 
   const {
@@ -32,7 +32,6 @@ export function DynamicForm() {
 
   const onSubmit = (data: any) => {
     console.log("Form Data Submitted:", data);
-    alert(JSON.stringify(data, null, 2));
   };
 
   return (
