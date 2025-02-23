@@ -8,5 +8,8 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./vitest.setup.ts",
+    deps: {
+      inline: ["@m/alchemy-ui", "@m/alchemy-theme"], // Add this line
+    },
   },
 });

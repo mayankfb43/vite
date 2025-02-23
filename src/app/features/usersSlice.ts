@@ -17,7 +17,6 @@ export const saveStudents = createAsyncThunk<
   "users/saveStudents",
   async ({ students, index }: { students: any[]; index: number }) => {
     const studentData = students[index];
-    console.log(studentData);
     const response = await fetch(
       `http://localhost:3000/students/${studentData.id}`,
       {
@@ -33,8 +32,6 @@ export const saveStudents = createAsyncThunk<
       const data = await response.json();
       return { data, index }; // return the data and the index
     }
-
-    throw new Error("Failed to update student data");
   }
 );
 
@@ -89,6 +86,9 @@ export const userSlice = createSlice({
     });
     builder.addCase(saveStudents.fulfilled, (state, action) => {
       state.students[action.payload.index] = action.payload.data;
+    });
+    builder.addCase(saveStudents.rejected, (state, action) => {
+      state.students = [];
     });
   },
 });
