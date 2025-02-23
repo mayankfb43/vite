@@ -18,6 +18,11 @@ export const getValidationSchema = (watch: any) => {
 
         age: yup
           .string()
+          .test("min-age", "height must be greater than 20", function () {
+            const index = this.path.match(/\d+/)[0];
+            const students = watch()["students"] || [];
+            return students[index].height > 20;
+          })
           .required("This field is required")
           .max(28, "Max age is 28")
           .test("min-age", "Age must be greater than 18", function () {
@@ -30,7 +35,7 @@ export const getValidationSchema = (watch: any) => {
         height: yup
           .number()
           .required("This field is required")
-          .test("min-age", "height must be greater than 18", function () {
+          .test("min-age", "height must be greater than 18", async function () {
             const index = this.path.match(/\d+/)[0];
             const names = watch("name")["students"] || [];
             let nameArr = names.map((n: any) => n.height);
@@ -44,7 +49,9 @@ export const getValidationSchema = (watch: any) => {
             const index = this.path.match(/\d+/)[0];
             const students = watch() || [];
 
-            return students["students"][index].skills.length > 2 ? true : false;
+            return students["students"][index].skills.length >= 2
+              ? true
+              : false;
           }),
         gender: yup
           .string()
