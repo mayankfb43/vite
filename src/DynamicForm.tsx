@@ -118,6 +118,7 @@ export function DynamicForm() {
             <GridRow offset={{ small: 3, medium: 1, large: 6 }}>
               {fields.map((field, index) => (
                 <GridCol
+                  data-testid="student-form"
                   style={{
                     display: "flex",
                     justifyContent: "center",
