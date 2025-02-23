@@ -2,7 +2,7 @@
 import { Field } from "@m/alchemy-ui/Field";
 import { Input } from "@m/alchemy-ui/Input";
 import { Button } from "@m/alchemy-ui/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RangeInput } from "@m/alchemy-ui/RangeInput";
 import { MultiSelect } from "@m/alchemy-ui/MultiSelect";
 import { Radio } from "@m/alchemy-ui/Radio";
@@ -10,6 +10,7 @@ import { RadioGroup } from "@m/alchemy-ui/RadioGroup";
 import { Grid } from "@m/alchemy-ui/Grid";
 import { GridRow } from "@m/alchemy-ui/GridRow";
 import { GridCol } from "@m/alchemy-ui/GridCol";
+import { Select } from "@m/alchemy-ui/Select";
 
 import {
   useForm,
@@ -21,28 +22,27 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { getValidationSchema } from "./validationSchema"; // Import the Yup schema
 import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 import { Fieldset } from "@m/alchemy-ui/Fieldset";
+import { UseSelector, useDispatch, useSelector } from "react-redux";
+import { fetchStudents, saveStudents } from "./app/features/usersSlice";
 
 export function DynamicForm() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchStudents());
+  }, []);
+
+  const students = useSelector((state) => state.user.students);
+
+  useEffect(() => {
+    if (students) {
+      reset({ students });
+    }
+  }, [students]);
+
   const methods = useForm({
     defaultValues: {
-      students: [
-        {
-          id: "5d66cb32-1e8c-43f3-a20a-7b06262cc637",
-          name: "mayank",
-          age: "23",
-          height: 51,
-          skills: ["second_value", "first_value"],
-          gender: "Male",
-        },
-        {
-          id: "31553cef-bd59-4cfd-bd47-f8041ae31872",
-          name: "mayur",
-          age: "27",
-          height: 48,
-          skills: ["first_value", "second_value"],
-          gender: "Male",
-        },
-      ],
+      students: students,
     },
     resolver: yupResolver(getValidationSchema(() => methods.watch())),
   });
@@ -65,7 +65,7 @@ export function DynamicForm() {
   });
 
   const onSubmit = (data: any) => {
-    console.log("Form Data Submitted:", data);
+    dispatch(saveStudents({ students: data.students, index: 0 }));
   };
 
   return (
@@ -287,6 +287,41 @@ export function DynamicForm() {
                             />
                           );
                         }}
+                      />
+                      <Controller
+                        name={`students.${index}.fruit`}
+                        control={control}
+                        render={({ field, fieldState }) => (
+                          <Field
+                            label="Label"
+                            required
+                            input={
+                              <Select
+                                hasStatus
+                                palette="interactiveDestructive"
+                                defaultValue={field.value}
+                                options={[
+                                  { label: "- Select an option -", value: "" },
+                                  { label: "Apple", value: "a_value" },
+                                  { label: "Banana", value: "b_value" },
+                                  { label: "Cherry", value: "c_value" },
+                                ]}
+                                onChange={(fruit) => {
+                                  field.onChange(fruit.value);
+                                }}
+                              />
+                            }
+                            status={
+                              errors.students?.[index]?.fruit
+                                ? {
+                                    level: "error",
+                                    message:
+                                      errors.students[index].fruit.message,
+                                  }
+                                : undefined
+                            }
+                          />
+                        )}
                       />
 
                       <Button

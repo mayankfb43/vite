@@ -56,7 +56,11 @@ export const getValidationSchema = (watch: any) => {
         gender: yup
           .string()
           .oneOf(["Male", "Female"], "Gender is required")
-          .required("Gender is required"), // ✅ Add required validation
+          .required("Gender is required"), // ✅ Add required validation,
+        fruit: yup
+          .string()
+          .oneOf(["a_value", "b_value"], "Cannot pick this fruit")
+          .required("Fruit is required"), // ✅ Add required validation
       })
     ),
   });

@@ -1,0 +1,28 @@
+{
+  "students": [
+    {
+      "id": "5d66cb32-1e8c-43f3-a20a-7b06262cc637",
+      "name": "john55",
+      "age": "23",
+      "height": 51,
+      "skills": [
+        "second_value",
+        "first_value"
+      ],
+      "gender": "Male",
+      "fruit": "b_value"
+    },
+    {
+      "id": "31553cef-bd59-4cfd-bd47-f8041ae31872",
+      "name": "mayur",
+      "age": "27",
+      "height": 48,
+      "skills": [
+        "first_value",
+        "second_value"
+      ],
+      "gender": "Male",
+      "fruit": "b_value"
+    }
+  ]
+}

@@ -1,5 +1,43 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
+export const fetchStudents = createAsyncThunk<any>( // Define the return type (you can replace `any` with a proper type)
+  "users/fetchStudents",
+  async () => {
+    const response = await fetch(`http://localhost:3000/students`);
+    if (response.ok) {
+      return await response.json();
+    }
+  }
+);
+
+export const saveStudents = createAsyncThunk<
+  any,
+  { students: any[]; index: number }
+>(
+  "users/saveStudents",
+  async ({ students, index }: { students: any[]; index: number }) => {
+    const studentData = students[index];
+    console.log(studentData);
+    const response = await fetch(
+      `http://localhost:3000/students/${studentData.id}`,
+      {
+        method: "PUT", // or PATCH
+        body: JSON.stringify(studentData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      return { data, index }; // return the data and the index
+    }
+
+    throw new Error("Failed to update student data");
+  }
+);
+
 // First, create the thunk
 export const fetchUsers = createAsyncThunk<
   any, // Define the return type (you can replace `any` with a proper type)
@@ -22,10 +60,12 @@ export const loadAll = createAsyncThunk("users/loadAll", async () => {
 
 export interface UserState {
   users: any[];
+  students: any[];
 }
 
 const initialState: UserState = {
   users: [],
+  students: [],
 };
 
 export const userSlice = createSlice({
@@ -44,6 +84,12 @@ export const userSlice = createSlice({
       console.log(current(state));
     });
     builder.addCase(loadAll.rejected, (state, action) => {});
+    builder.addCase(fetchStudents.fulfilled, (state, action) => {
+      state.students = action.payload;
+    });
+    builder.addCase(saveStudents.fulfilled, (state, action) => {
+      state.students[action.payload.index] = action.payload.data;
+    });
   },
 });
 
